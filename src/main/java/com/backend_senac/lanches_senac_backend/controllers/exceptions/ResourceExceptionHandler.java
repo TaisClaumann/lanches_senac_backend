@@ -1,7 +1,6 @@
 package com.backend_senac.lanches_senac_backend.controllers.exceptions;
 
-import com.backend_senac.senac_backend_carrinho.services.exceptions.ObjetoNaoEncontradoException;
-import jakarta.servlet.http.HttpServletRequest;
+import com.backend_senac.lanches_senac_backend.services.exceptions.ObjetoNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
