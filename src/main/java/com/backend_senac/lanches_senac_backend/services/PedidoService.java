@@ -13,18 +13,20 @@ import java.util.Objects;
 public class PedidoService {
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private PedidoRepository repository;
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
     private ItemPedidoService itemPedidoService;
 
     public Pedido buscarPorId(Long id) {
-        return pedidoRepository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido " + id + " não encontrado!"));
+        return repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido " + id + " não encontrado!"));
     }
 
     public Pedido salvar(Pedido pedido) {
-        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+        usuarioService.buscarPorId(pedido.getUsuario().getId());
+
+        Pedido pedidoSalvo = repository.save(pedido);
         pedido.getItensPedido().stream()
                 .filter(itemPedido -> Objects.isNull(itemPedido.getId()))
                 .forEach(itemPedido -> {
@@ -42,6 +44,6 @@ public class PedidoService {
 
     public List<Pedido> listarPorUsuario(Long usuarioId) {
         usuarioService.buscarPorId(usuarioId);
-        return pedidoRepository.findByUsuarioId(usuarioId);
+        return repository.findByUsuarioId(usuarioId);
     }
 }
