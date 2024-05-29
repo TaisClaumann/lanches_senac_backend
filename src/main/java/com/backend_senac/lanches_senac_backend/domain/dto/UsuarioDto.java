@@ -18,13 +18,11 @@ public class UsuarioDto {
     private String nome;
     private String cpf;
     private String login;
-    private List<Pedido> pedidos;
 
     public UsuarioDto(Usuario usuario) {
         this.id = usuario.getId();
         this.nome = usuario.getNome();
         this.cpf = usuario.getCpf();
         this.login = usuario.getLogin();
-        this.pedidos = usuario.getPedidos();
     }
 }

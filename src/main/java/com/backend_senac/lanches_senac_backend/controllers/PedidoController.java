@@ -35,8 +35,8 @@ public class PedidoController {
         return pedidoService.listarPorUsuario(usuarioId);
     }
 
-    @GetMapping("/aberto")
-    public PedidoDto buscarUltimoPedidoAberto() {
-        return pedidoService.buscarUltimoPedidoAberto();
+    @GetMapping("/aberto/{id}")
+    public PedidoDto buscarUltimoPedidoAbertoUsuario(@PathVariable("id") Long usuarioId) {
+        return pedidoService.buscarUltimoPedidoAbertoUsuario(usuarioId);
     }
 }

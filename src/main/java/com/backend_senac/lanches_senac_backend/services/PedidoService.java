@@ -55,8 +55,8 @@ public class PedidoService {
         return repository.findByUsuarioId(usuarioId).stream().map(PedidoDto::new).toList();
     }
 
-    public PedidoDto buscarUltimoPedidoAberto() {
-        Pedido pedido = repository.findFirstByStatusPedidoOrderByDataCriacaoDesc(StatusPedido.ABERTO)
+    public PedidoDto buscarUltimoPedidoAbertoUsuario(Long usuarioId) {
+        Pedido pedido = repository.findFirstByStatusPedidoAndUsuarioIdOrderByDataCriacaoDesc(StatusPedido.ABERTO, usuarioId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Não existem pedidos abertos!"));
         return new PedidoDto(pedido);
     }
