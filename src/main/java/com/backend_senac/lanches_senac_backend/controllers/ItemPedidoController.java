@@ -1,6 +1,7 @@
 package com.backend_senac.lanches_senac_backend.controllers;
 
 import com.backend_senac.lanches_senac_backend.domain.ItemPedido;
+import com.backend_senac.lanches_senac_backend.domain.dto.ItemPedidoDto;
 import com.backend_senac.lanches_senac_backend.services.ItemPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class ItemPedidoController {
     private ItemPedidoService itemPedidoService;
 
     @PostMapping
-    public ItemPedido salvar(@RequestBody ItemPedido itemPedido) {
+    public ItemPedidoDto salvar(@RequestBody ItemPedido itemPedido) {
         return itemPedidoService.salvar(itemPedido);
     }
 
     @GetMapping
-    public List<ItemPedido> listarTodos() {
+    public List<ItemPedidoDto> listarTodos() {
         return itemPedidoService.listarTodos();
     }
 }

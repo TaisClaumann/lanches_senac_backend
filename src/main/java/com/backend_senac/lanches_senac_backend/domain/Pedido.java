@@ -1,5 +1,6 @@
 package com.backend_senac.lanches_senac_backend.domain;
 
+import com.backend_senac.lanches_senac_backend.enums.FormaPagamento;
 import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,15 +20,15 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate data;
+    private LocalDate dataCriacao;
 
     @Enumerated(EnumType.STRING)
     private StatusPedido statusPedido;
+    @Enumerated(EnumType.STRING)
+    private FormaPagamento formaPagamento;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     private Usuario usuario;
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    private FormaPagamento formaPagamento;
     @ManyToOne(cascade = CascadeType.REFRESH)
     private Endereco endereco;
 
