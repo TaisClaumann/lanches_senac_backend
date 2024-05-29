@@ -21,6 +21,8 @@ public class PedidoService {
     private UsuarioService usuarioService;
     @Autowired
     private ItemPedidoService itemPedidoService;
+    @Autowired
+    private ProdutoService produtoService;
 
     public PedidoDto buscarPorId(Long id) {
         Pedido pedido = repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido " + id + " não encontrado!"));
@@ -32,16 +34,21 @@ public class PedidoService {
 
         if(Objects.isNull(pedido.getId())) {
             pedido.setDataCriacao(LocalDate.now());
+            pedido.setStatusPedido(StatusPedido.ABERTO);
         }
 
         Pedido pedidoSalvo = repository.save(pedido);
-        pedido.getItensPedido().stream()
-                .filter(itemPedido -> Objects.isNull(itemPedido.getId()))
+        prepararItensPedido(pedidoSalvo);
+        return new PedidoDto(pedidoSalvo);
+    }
+
+    private void prepararItensPedido(Pedido pedido) {
+        pedido.getItensPedido().stream().filter(itemPedido -> Objects.isNull(itemPedido.getId()))
                 .forEach(itemPedido -> {
-                    itemPedido.setPedido(pedidoSalvo);
+                    itemPedido.setPedido(pedido);
+                    produtoService.buscarPorId(itemPedido.getProduto().getId());
                     itemPedidoService.salvar(itemPedido);
                 });
-        return new PedidoDto(pedidoSalvo);
     }
 
     public PedidoDto alterar(Pedido pedido, Long id) {
