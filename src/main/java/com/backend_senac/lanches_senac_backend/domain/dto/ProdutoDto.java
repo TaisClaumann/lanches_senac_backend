@@ -13,10 +13,12 @@ public class ProdutoDto {
     private Long id;
     private String nome;
     private String valor;
+    private String linkFoto;
 
     public ProdutoDto(Produto produto) {
         this.id = produto.getId();
         this.nome = produto.getNome();
         this.valor = produto.getValor();
+        this.linkFoto = produto.getLinkFoto();
     }
 }
