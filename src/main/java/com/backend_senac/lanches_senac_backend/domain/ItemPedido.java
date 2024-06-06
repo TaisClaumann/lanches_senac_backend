@@ -1,8 +1,11 @@
 package com.backend_senac.lanches_senac_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +20,9 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer quantidade;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private BigDecimal valor;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.REFRESH)

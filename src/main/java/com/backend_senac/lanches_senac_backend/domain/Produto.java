@@ -1,9 +1,11 @@
 package com.backend_senac.lanches_senac_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,7 +21,9 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    private String valor;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private BigDecimal valor;
     private String linkFoto;
 
     @JsonIgnore

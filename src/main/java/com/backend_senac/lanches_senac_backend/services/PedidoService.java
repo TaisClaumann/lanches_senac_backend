@@ -1,5 +1,6 @@
 package com.backend_senac.lanches_senac_backend.services;
 
+import com.backend_senac.lanches_senac_backend.domain.ItemPedido;
 import com.backend_senac.lanches_senac_backend.domain.Pedido;
 import com.backend_senac.lanches_senac_backend.domain.dto.PedidoDto;
 import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
@@ -8,6 +9,7 @@ import com.backend_senac.lanches_senac_backend.services.exceptions.ObjetoNaoEnco
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -21,8 +23,6 @@ public class PedidoService {
     private UsuarioService usuarioService;
     @Autowired
     private ItemPedidoService itemPedidoService;
-    @Autowired
-    private ProdutoService produtoService;
 
     public PedidoDto buscarPorId(Long id) {
         Pedido pedido = repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido " + id + " não encontrado!"));
@@ -38,23 +38,14 @@ public class PedidoService {
         }
 
         Pedido pedidoSalvo = repository.save(pedido);
-        prepararItensPedido(pedidoSalvo);
-        return new PedidoDto(pedidoSalvo);
-    }
-
-    private void prepararItensPedido(Pedido pedido) {
-        pedido.getItensPedido().stream().filter(itemPedido -> Objects.isNull(itemPedido.getId()))
-                .forEach(itemPedido -> {
-                    itemPedido.setPedido(pedido);
-                    produtoService.buscarPorId(itemPedido.getProduto().getId());
-                    itemPedidoService.salvar(itemPedido);
-                });
+        return new PedidoDto(prepararPedido(pedidoSalvo));
     }
 
     public PedidoDto alterar(Pedido pedido, Long id) {
         buscarPorId(id);
         pedido.setId(id);
-        return salvar(pedido);
+        pedido = repository.save(pedido);
+        return new PedidoDto(prepararPedido(pedido));
     }
 
     public List<PedidoDto> listarPorUsuario(Long usuarioId) {
@@ -66,5 +57,27 @@ public class PedidoService {
         Pedido pedido = repository.findFirstByStatusPedidoAndUsuarioIdOrderByDataCriacaoDesc(StatusPedido.ABERTO, usuarioId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Não existem pedidos abertos!"));
         return new PedidoDto(pedido);
+    }
+
+    private Pedido prepararPedido(Pedido pedido) {
+        for (ItemPedido itemPedido : pedido.getItensPedido()) {
+            itemPedido.setPedido(pedido);
+            itemPedidoService.salvar(itemPedido);
+        }
+        return calcularTotalPedido(pedido.getId());
+    }
+
+    private Pedido calcularTotalPedido(Long id) {
+        Pedido pedido = repository.findById(id).orElse(null);
+        if (Objects.nonNull(pedido)) {
+            BigDecimal total = BigDecimal.ZERO;
+
+            for (ItemPedido itemPedido : pedido.getItensPedido()) {
+                total = total.add(itemPedido.getValor());
+            }
+            pedido.setValor(total);
+            pedido = repository.save(pedido);
+        }
+        return pedido;
     }
 }

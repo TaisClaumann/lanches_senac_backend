@@ -2,9 +2,11 @@ package com.backend_senac.lanches_senac_backend.domain;
 
 import com.backend_senac.lanches_senac_backend.enums.FormaPagamento;
 import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate dataCriacao;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
     private StatusPedido statusPedido;

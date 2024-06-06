@@ -1,10 +1,11 @@
 package com.backend_senac.lanches_senac_backend.domain.dto;
 
-import com.backend_senac.lanches_senac_backend.domain.*;
+import com.backend_senac.lanches_senac_backend.domain.Pedido;
 import com.backend_senac.lanches_senac_backend.enums.FormaPagamento;
 import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +24,7 @@ public class PedidoDto {
     private UsuarioDto usuario;
     private EnderecoDto endereco;
     private List<ItemPedidoDto> itensPedido;
+    private BigDecimal valor;
 
     public PedidoDto(Pedido pedido) {
         this.id = pedido.getId();
@@ -32,5 +34,6 @@ public class PedidoDto {
         this.usuario = Objects.nonNull(pedido.getUsuario()) ? new UsuarioDto(pedido.getUsuario()) : null;
         this.endereco = Objects.nonNull(pedido.getEndereco()) ? new EnderecoDto(pedido.getEndereco()) : null;
         this.itensPedido = pedido.getItensPedido().stream().map(ItemPedidoDto::new).toList();
+        this.valor = pedido.getValor();
     }
 }
