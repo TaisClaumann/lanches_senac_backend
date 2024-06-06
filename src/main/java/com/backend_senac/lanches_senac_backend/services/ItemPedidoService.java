@@ -4,6 +4,7 @@ import com.backend_senac.lanches_senac_backend.domain.ItemPedido;
 import com.backend_senac.lanches_senac_backend.domain.dto.ItemPedidoDto;
 import com.backend_senac.lanches_senac_backend.domain.dto.ProdutoDto;
 import com.backend_senac.lanches_senac_backend.repositories.ItemPedidoRepository;
+import com.backend_senac.lanches_senac_backend.services.exceptions.ObjetoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,15 @@ public class ItemPedidoService {
 
     public List<ItemPedidoDto> listarTodos() {
         return repository.findAll().stream().map(ItemPedidoDto::new).toList();
+    }
+
+    public ItemPedidoDto buscarPorId(Long id) {
+        ItemPedido itemPedido = repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Item pedido " + id + " não encontrado!"));
+        return new ItemPedidoDto(itemPedido);
+    }
+
+    public void excluir(Long id) {
+        buscarPorId(id);
+        repository.deleteById(id);
     }
 }

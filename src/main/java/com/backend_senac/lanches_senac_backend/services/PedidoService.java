@@ -2,6 +2,7 @@ package com.backend_senac.lanches_senac_backend.services;
 
 import com.backend_senac.lanches_senac_backend.domain.ItemPedido;
 import com.backend_senac.lanches_senac_backend.domain.Pedido;
+import com.backend_senac.lanches_senac_backend.domain.dto.ItemPedidoDto;
 import com.backend_senac.lanches_senac_backend.domain.dto.PedidoDto;
 import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
 import com.backend_senac.lanches_senac_backend.repositories.PedidoRepository;
@@ -24,9 +25,8 @@ public class PedidoService {
     @Autowired
     private ItemPedidoService itemPedidoService;
 
-    public PedidoDto buscarPorId(Long id) {
-        Pedido pedido = repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido " + id + " não encontrado!"));
-        return new PedidoDto(pedido);
+    public Pedido buscarPorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido " + id + " não encontrado!"));
     }
 
     public PedidoDto salvar(Pedido pedido) {
@@ -44,7 +44,6 @@ public class PedidoService {
     public PedidoDto alterar(Pedido pedido, Long id) {
         buscarPorId(id);
         pedido.setId(id);
-        pedido = repository.save(pedido);
         return new PedidoDto(prepararPedido(pedido));
     }
 
@@ -60,24 +59,20 @@ public class PedidoService {
     }
 
     private Pedido prepararPedido(Pedido pedido) {
-        for (ItemPedido itemPedido : pedido.getItensPedido()) {
-            itemPedido.setPedido(pedido);
-            itemPedidoService.salvar(itemPedido);
-        }
-        return calcularTotalPedido(pedido.getId());
-    }
+        BigDecimal total = BigDecimal.ZERO;
+        List<ItemPedido> itensPedido = pedido.getItensPedido();
 
-    private Pedido calcularTotalPedido(Long id) {
-        Pedido pedido = repository.findById(id).orElse(null);
-        if (Objects.nonNull(pedido)) {
-            BigDecimal total = BigDecimal.ZERO;
-
-            for (ItemPedido itemPedido : pedido.getItensPedido()) {
-                total = total.add(itemPedido.getValor());
+        for (ItemPedido itemPedido : itensPedido) {
+            if (itemPedido.getQuantidade() > 0) {
+                itemPedido.setPedido(pedido);
+                ItemPedidoDto itemSalvo = itemPedidoService.salvar(itemPedido);
+                total = total.add(itemSalvo.getValor());
+            } else if (Objects.nonNull(itemPedido.getId())) {
+                itemPedidoService.excluir(itemPedido.getId());
             }
-            pedido.setValor(total);
-            pedido = repository.save(pedido);
         }
-        return pedido;
+
+        pedido.setValor(total);
+        return repository.save(pedido);
     }
 }
