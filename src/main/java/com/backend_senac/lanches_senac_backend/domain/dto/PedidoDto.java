@@ -1,8 +1,8 @@
 package com.backend_senac.lanches_senac_backend.domain.dto;
 
 import com.backend_senac.lanches_senac_backend.domain.Pedido;
-import com.backend_senac.lanches_senac_backend.enums.FormaPagamento;
-import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
+import com.backend_senac.lanches_senac_backend.enums.FormaPagamentoEnum;
+import com.backend_senac.lanches_senac_backend.enums.StatusPedidoEnum;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -19,8 +19,8 @@ public class PedidoDto {
 
     private Long id;
     private LocalDate dataCriacao;
-    private StatusPedido statusPedido;
-    private FormaPagamento formaPagamento;
+    private StatusPedidoEnum statusPedido;
+    private FormaPagamentoEnum formaPagamento;
     private UsuarioDto usuario;
     private EnderecoDto endereco;
     private List<ItemPedidoDto> itensPedido;

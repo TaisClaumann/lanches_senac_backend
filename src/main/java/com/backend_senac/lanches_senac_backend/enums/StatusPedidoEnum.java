@@ -1,6 +1,6 @@
 package com.backend_senac.lanches_senac_backend.enums;
 
-public enum StatusPedido {
+public enum StatusPedidoEnum {
 
     ABERTO, CANCELADO, FECHADO;
 }

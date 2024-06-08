@@ -4,9 +4,9 @@ import com.backend_senac.lanches_senac_backend.domain.ItemPedido;
 import com.backend_senac.lanches_senac_backend.domain.Pedido;
 import com.backend_senac.lanches_senac_backend.domain.dto.ItemPedidoDto;
 import com.backend_senac.lanches_senac_backend.domain.dto.PedidoDto;
-import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
+import com.backend_senac.lanches_senac_backend.enums.StatusPedidoEnum;
 import com.backend_senac.lanches_senac_backend.repositories.PedidoRepository;
-import com.backend_senac.lanches_senac_backend.services.exceptions.ObjetoNaoEncontradoException;
+import com.backend_senac.lanches_senac_backend.services.exceptions.RegistroNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class PedidoService {
     private ItemPedidoService itemPedidoService;
 
     public Pedido buscarPorId(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido " + id + " não encontrado!"));
+        return repository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Pedido " + id + " não encontrado!"));
     }
 
     public PedidoDto salvar(Pedido pedido) {
@@ -34,7 +34,7 @@ public class PedidoService {
 
         if(Objects.isNull(pedido.getId())) {
             pedido.setDataCriacao(LocalDate.now());
-            pedido.setStatusPedido(StatusPedido.ABERTO);
+            pedido.setStatusPedido(StatusPedidoEnum.ABERTO);
         }
 
         Pedido pedidoSalvo = repository.save(pedido);
@@ -53,8 +53,8 @@ public class PedidoService {
     }
 
     public PedidoDto buscarUltimoPedidoAbertoUsuario(Long usuarioId) {
-        Pedido pedido = repository.findFirstByStatusPedidoAndUsuarioIdOrderByDataCriacaoDesc(StatusPedido.ABERTO, usuarioId)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException("Não existem pedidos abertos!"));
+        Pedido pedido = repository.findFirstByStatusPedidoAndUsuarioIdOrderByDataCriacaoDesc(StatusPedidoEnum.ABERTO, usuarioId)
+                .orElseThrow(() -> new RegistroNaoEncontradoException("Não existem pedidos abertos!"));
         return new PedidoDto(pedido);
     }
 

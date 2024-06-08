@@ -1,7 +1,7 @@
 package com.backend_senac.lanches_senac_backend.domain;
 
-import com.backend_senac.lanches_senac_backend.enums.FormaPagamento;
-import com.backend_senac.lanches_senac_backend.enums.StatusPedido;
+import com.backend_senac.lanches_senac_backend.enums.FormaPagamentoEnum;
+import com.backend_senac.lanches_senac_backend.enums.StatusPedidoEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,9 +28,9 @@ public class Pedido {
     private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
-    private StatusPedido statusPedido;
+    private StatusPedidoEnum statusPedido;
     @Enumerated(EnumType.STRING)
-    private FormaPagamento formaPagamento;
+    private FormaPagamentoEnum formaPagamento;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     private Usuario usuario;
