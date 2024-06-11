@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,7 +22,7 @@ public class Produto {
     private String nome;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal valor;
+    private Double valor;
     private String linkFoto;
 
     @JsonIgnore

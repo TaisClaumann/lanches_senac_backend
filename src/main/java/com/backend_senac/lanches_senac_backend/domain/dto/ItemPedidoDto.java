@@ -3,7 +3,6 @@ package com.backend_senac.lanches_senac_backend.domain.dto;
 import com.backend_senac.lanches_senac_backend.domain.ItemPedido;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -16,7 +15,7 @@ public class ItemPedidoDto {
     private Long id;
     private Integer quantidade;
     private ProdutoDto produto;
-    private BigDecimal valor;
+    private Double valor;
 
     public ItemPedidoDto(ItemPedido itemPedido) {
         this.id = itemPedido.getId();

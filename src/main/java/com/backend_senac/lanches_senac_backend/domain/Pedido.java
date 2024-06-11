@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class Pedido {
     private LocalDate dataCriacao;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal valor;
+    private Double valor;
 
     @Enumerated(EnumType.STRING)
     private StatusPedidoEnum statusPedido;
@@ -37,6 +36,6 @@ public class Pedido {
     @ManyToOne(cascade = CascadeType.REFRESH)
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER)
     private List<ItemPedido> itensPedido;
 }

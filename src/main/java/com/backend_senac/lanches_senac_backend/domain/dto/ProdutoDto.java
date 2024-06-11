@@ -3,8 +3,6 @@ package com.backend_senac.lanches_senac_backend.domain.dto;
 import com.backend_senac.lanches_senac_backend.domain.Produto;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -14,7 +12,7 @@ public class ProdutoDto {
 
     private Long id;
     private String nome;
-    private BigDecimal valor;
+    private Double valor;
     private String linkFoto;
 
     public ProdutoDto(Produto produto) {

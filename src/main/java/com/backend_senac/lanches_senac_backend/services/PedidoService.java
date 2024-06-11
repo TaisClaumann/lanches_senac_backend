@@ -7,10 +7,8 @@ import com.backend_senac.lanches_senac_backend.domain.dto.PedidoDto;
 import com.backend_senac.lanches_senac_backend.enums.StatusPedidoEnum;
 import com.backend_senac.lanches_senac_backend.repositories.PedidoRepository;
 import com.backend_senac.lanches_senac_backend.services.exceptions.RegistroNaoEncontradoException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -18,12 +16,15 @@ import java.util.Objects;
 @Service
 public class PedidoService {
 
-    @Autowired
-    private PedidoRepository repository;
-    @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
-    private ItemPedidoService itemPedidoService;
+    private final PedidoRepository repository;
+    private final UsuarioService usuarioService;
+    private final ItemPedidoService itemPedidoService;
+
+    public PedidoService(PedidoRepository repository, UsuarioService usuarioService, ItemPedidoService itemPedidoService) {
+        this.repository = repository;
+        this.usuarioService = usuarioService;
+        this.itemPedidoService = itemPedidoService;
+    }
 
     public Pedido buscarPorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Pedido " + id + " não encontrado!"));
@@ -59,14 +60,14 @@ public class PedidoService {
     }
 
     private Pedido prepararPedido(Pedido pedido) {
-        BigDecimal total = BigDecimal.ZERO;
+        Double total = 0.0;
         List<ItemPedido> itensPedido = pedido.getItensPedido();
 
         for (ItemPedido itemPedido : itensPedido) {
             if (itemPedido.getQuantidade() > 0) {
                 itemPedido.setPedido(pedido);
                 ItemPedidoDto itemSalvo = itemPedidoService.salvar(itemPedido);
-                total = total.add(itemSalvo.getValor());
+                total += itemSalvo.getValor();
             } else if (Objects.nonNull(itemPedido.getId())) {
                 itemPedidoService.excluir(itemPedido.getId());
             }

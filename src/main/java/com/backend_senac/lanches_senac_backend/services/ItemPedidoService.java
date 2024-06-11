@@ -8,7 +8,6 @@ import com.backend_senac.lanches_senac_backend.services.exceptions.RegistroNaoEn
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -21,10 +20,7 @@ public class ItemPedidoService {
 
     public ItemPedidoDto salvar(ItemPedido itemPedido) {
         ProdutoDto produto = produtoService.buscarPorId(itemPedido.getProduto().getId());
-        BigDecimal quantidadeItem = BigDecimal.valueOf(Long.parseLong(itemPedido.getQuantidade().toString()));
-
-        BigDecimal totalItemPedido = produto.getValor().multiply(quantidadeItem);
-        itemPedido.setValor(totalItemPedido);
+        itemPedido.setValor(itemPedido.getQuantidade() * produto.getValor());
         return new ItemPedidoDto(repository.save(itemPedido));
     }
 

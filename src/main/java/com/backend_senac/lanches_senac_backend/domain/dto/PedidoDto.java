@@ -5,7 +5,6 @@ import com.backend_senac.lanches_senac_backend.enums.FormaPagamentoEnum;
 import com.backend_senac.lanches_senac_backend.enums.StatusPedidoEnum;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +23,7 @@ public class PedidoDto {
     private UsuarioDto usuario;
     private EnderecoDto endereco;
     private List<ItemPedidoDto> itensPedido;
-    private BigDecimal valor;
+    private Double valor;
 
     public PedidoDto(Pedido pedido) {
         this.id = pedido.getId();

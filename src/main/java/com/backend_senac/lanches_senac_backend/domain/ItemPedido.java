@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,7 +20,7 @@ public class ItemPedido {
     private Integer quantidade;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal valor;
+    private Double valor;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.REFRESH)
